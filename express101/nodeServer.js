@@ -26,6 +26,16 @@ const server = http.createServer((req, res) => {
     const homePageHTML = fs.readFileSync("node.html");
     res.write(homePageHTML);
     res.end();
+  } else if (req.url === "/node-logo.png") {
+    res.writeHead(200, {"content-type": "image/png"});
+    const image = fs.readFileSync("node-logo.png");
+    res.write(image);
+    res.end();
+  } else if (req.url === "/style.css") {
+    res.writeHead(200, {"content-type": "text/css"});
+    const css = fs.readFileSync("style.css");
+    res.write(css);
+    res.end();
   } else {
     res.writeHead(404, { "content-type": "text/html" });
     res.write("<h1>Else statement 404</h1>");

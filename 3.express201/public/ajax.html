@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    let data = {
+        name: 'sayid'
+    }
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+
+    const ourRequest = fetch('http://localhost:3000/ajax', options)
+
+    ourRequest.then((response) => response.json())
+        .then(json => console.log(json))
+</script>

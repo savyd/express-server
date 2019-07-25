@@ -14,10 +14,28 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+    if(req.query.msg === "fail"){
+        res.locals.msg = "Sorry, username and password is invalid"
+    } else {
+        res.locals.msg = ""
+    }
+
+    // send me on to the next piece of middlware!
+    next();
+})
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-res.redirect("/")
-app.get("/", (req, res, next) => res.render("login"));
+app.get("/", (req, res, next) => {
+    // the req object has a query property in express
+    // req.query is an object, whit a property of even key in the query string
+    // the query string is whare you put insecure data
+    console.log(req.query);
+    res.render("login")
+});
+
+
 app.get("/welcome", (req, res, next) => {
     // req.cookies object will have a property for every named cookies
     // that has ben set. 
@@ -28,7 +46,7 @@ app.get("/welcome", (req, res, next) => {
 app.get("/logout", (req, res, next) => {
     // res.clearCookie takes 1 arg:
     // 1. Cookie to clear (by name)
-    
+    res.clearCookie("username");
     res.redirect("/");
 })
 
@@ -50,6 +68,7 @@ app.post("/process_login", (req, res, next) => {
         // 1. whare to send the browser
         res.redirect("/welcome");
     } else {
+        // The "?" is a special character in a URl
         res.redirect("/?msg=fail")
     }
     // res.json(req.body);
